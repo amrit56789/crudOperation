@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const connection = require("../util/database");
+const { connection } = require("../util/database");
 
 const role = new mongoose.Schema({
   name: {
