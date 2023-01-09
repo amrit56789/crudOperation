@@ -16,6 +16,16 @@ const RoleDeleteValidation = () => {
   return [check("id").not().isEmpty().withMessage("Please Enter Id")];
 };
 
+const RoleEditValidation = () => {
+  return [
+    check("id").not().isEmpty().withMessage("Please Enter Id"),
+    check("description")
+      .not()
+      .isEmpty()
+      .withMessage("Please Enter Description"),
+  ];
+};
+
 const validationMiddleWare = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -27,5 +37,6 @@ const validationMiddleWare = (req, res, next) => {
 module.exports = {
   checkRoleValidation,
   RoleDeleteValidation,
+  RoleEditValidation,
   validationMiddleWare,
 };

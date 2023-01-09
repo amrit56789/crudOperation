@@ -24,4 +24,22 @@ const deleteRole = async (req, res) => {
   }
 };
 
-module.exports = { addRole, deleteRole };
+const editRole = async (req, res) => {
+  try {
+    const { id, description } = req.body;
+    const role = await Role.findOneAndUpdate(
+      { id: id },
+      { description: description },
+      { new: true }
+    );
+    if (!role) {
+      return res.status(404).send({ message: "Role not found" });
+    }
+    res.status(200).send(role);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { addRole, deleteRole, editRole };

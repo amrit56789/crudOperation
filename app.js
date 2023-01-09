@@ -6,11 +6,16 @@ dotenv.config();
 const bodyParser = require("body-parser");
 
 const mongoConnect = require("./util/database");
-const { addRole, deleteRole } = require("./controllers/roleControllers");
+const {
+  addRole,
+  deleteRole,
+  editRole,
+} = require("./controllers/roleControllers");
 
 const {
   checkRoleValidation,
   RoleDeleteValidation,
+  RoleEditValidation,
   validationMiddleWare,
 } = require("./middleWare/middleware");
 
@@ -23,6 +28,11 @@ app.delete(
   "/role/delete/:id",
   [RoleDeleteValidation(), validationMiddleWare],
   deleteRole
+);
+app.patch(
+  "/role/edit/:id",
+  [RoleEditValidation(), validationMiddleWare],
+  editRole
 );
 // Port connection
 const port = process.env.port || 8000;
