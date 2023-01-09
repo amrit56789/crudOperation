@@ -26,16 +26,13 @@ const deleteRole = async (req, res) => {
 
 const editRole = async (req, res) => {
   try {
-    const { id, description } = req.body;
-    const role = await Role.findOneAndUpdate(
-      { id: id },
-      { description: description },
+    const { _id, description } = req.body;
+    const updatedRole = await Role.findOneAndUpdate(
+      { _id },
+      { description },
       { new: true }
     );
-    if (!role) {
-      return res.status(404).send({ message: "Role not found" });
-    }
-    res.status(200).send(role);
+    res.status(200).send(updatedRole);
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal Server Error" });
