@@ -12,6 +12,10 @@ const checkRoleValidation = () => {
   ];
 };
 
+const RoleDeleteValidation = () => {
+  return [check("id").not().isEmpty().withMessage("Please Enter Id")];
+};
+
 const validationMiddleWare = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -20,4 +24,8 @@ const validationMiddleWare = (req, res, next) => {
   next();
 };
 
-module.exports = { checkRoleValidation, validationMiddleWare };
+module.exports = {
+  checkRoleValidation,
+  RoleDeleteValidation,
+  validationMiddleWare,
+};
