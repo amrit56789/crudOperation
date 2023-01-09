@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 
 const Role = require("./models/role");
 const { addRole } = require("./controllers/roleControllers");
+const checkNameValidation = require("./middleWare/middleware");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -20,7 +21,7 @@ mongoose.connect(process.env.MONGODBCONNECT, (error) => {
 });
 
 // Role table
-app.post("/role/add", addRole);
+app.post("/role/add", checkNameValidation, addRole);
 
 // Port connection
 const port = process.env.port || 8000;
