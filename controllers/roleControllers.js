@@ -39,4 +39,13 @@ const editRole = async (req, res) => {
   }
 };
 
-module.exports = { addRole, deleteRole, editRole };
+const findRole = async (req, res) => {
+  try {
+    const roles = await Role.find({});
+    res.status(200).send(roles);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+module.exports = { addRole, deleteRole, editRole, findRole };

@@ -10,6 +10,7 @@ const {
   addRole,
   deleteRole,
   editRole,
+  findRole,
 } = require("./controllers/roleControllers");
 
 const {
@@ -34,6 +35,7 @@ app.patch(
   [RoleEditValidation(), validationMiddleWare],
   editRole
 );
+app.get("/role/list", findRole);
 // Port connection
 const port = process.env.port || 8000;
 
