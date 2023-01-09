@@ -10,6 +10,7 @@ const { addRole, deleteRole } = require("./controllers/roleControllers");
 
 const {
   checkRoleValidation,
+  RoleDeleteValidation,
   validationMiddleWare,
 } = require("./middleWare/middleware");
 
