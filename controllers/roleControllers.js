@@ -24,4 +24,45 @@ const deleteRole = async (req, res) => {
   }
 };
 
-module.exports = { addRole, deleteRole };
+const editRole = async (req, res) => {
+  try {
+    const { _id, description } = req.body;
+    const updatedRole = await Role.findOneAndUpdate(
+      { _id },
+      { description },
+      { new: true }
+    );
+    res.status(200).send(updatedRole);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
+const findRole = async (req, res) => {
+  try {
+    const roles = await Role.find({});
+    res.status(200).send(roles);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
+const findSingleRoleData = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const singleData = await Role.findById(id);
+    res.status(200).send(singleData);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal Server Errors" });
+  }
+};
+module.exports = {
+  addRole,
+  deleteRole,
+  editRole,
+  findRole,
+  findSingleRoleData,
+};
