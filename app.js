@@ -14,10 +14,13 @@ const {
   findSingleRoleData,
 } = require("./controllers/roleControllers");
 
+const { userCreate } = require("./controllers/userControllers");
+
 const {
   checkRoleValidation,
   RoleDeleteValidation,
   RoleEditValidation,
+  checkUserValidation,
   validationMiddleWare,
 } = require("./middleWare/middleware");
 
@@ -38,6 +41,14 @@ app.patch(
 );
 app.get("/role/list", findRole);
 app.get("/role/:id", findSingleRoleData);
+
+// user table
+app.post(
+  "/user/register",
+  [checkUserValidation(), validationMiddleWare],
+  userCreate
+);
+
 // Port connection
 const port = process.env.port || 8000;
 
