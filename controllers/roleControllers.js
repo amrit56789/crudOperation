@@ -14,4 +14,14 @@ const addRole = async (req, res) => {
   }
 };
 
-module.exports = { addRole };
+const deleteRole = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await Role.findByIdAndDelete(id);
+    res.status(200).send({ message: "Data is deleted success fully" });
+  } catch (error) {
+    res.status(500).send({ message: "500 error to user" });
+  }
+};
+
+module.exports = { addRole, deleteRole };
