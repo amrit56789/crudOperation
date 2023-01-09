@@ -11,6 +11,7 @@ const {
   deleteRole,
   editRole,
   findRole,
+  findSingleRoleData,
 } = require("./controllers/roleControllers");
 
 const {
@@ -36,6 +37,7 @@ app.patch(
   editRole
 );
 app.get("/role/list", findRole);
+app.get("/role/:id", findSingleRoleData);
 // Port connection
 const port = process.env.port || 8000;
 
