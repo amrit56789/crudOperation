@@ -5,14 +5,17 @@ const dotenv = require("dotenv");
 dotenv.config();
 const bodyParser = require("body-parser");
 
-const Role = require("./models/role");
 const { addRole } = require("./controllers/roleControllers");
-const checkNameValidation = require("./middleWare/middleware");
+
+const {
+  checkRoleValidation,
+  validationMiddleWare,
+} = require("./middleWare/middleware");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-mongoose.connect(process.env.MONGODBCONNECT, (error) => {
+mongoose.connect(process.env.MONGO_DB_URL, (error) => {
   if (error) {
     console.log(`Unable to connect to the server : ${error}`);
   } else {
@@ -21,7 +24,7 @@ mongoose.connect(process.env.MONGODBCONNECT, (error) => {
 });
 
 // Role table
-app.post("/role/add", checkNameValidation, addRole);
+app.post("/role/add", [checkRoleValidation(), validationMiddleWare], addRole);
 
 // Port connection
 const port = process.env.port || 8000;

@@ -1,14 +1,23 @@
-const checkNameValidation = (req, res, next) => {
-  const name = req.body.name;
-  if (!name) {
-    res
-      .status(401)
-      .send({ message: "Name cannot be empty, Please Enter name" });
-  } else if (name.length <= 2) {
-    res.status(401).send({ message: "Name must be 3 character" });
-  } else {
-    next();
-  }
+const { check, validationResult } = require("express-validator");
+
+const checkRoleValidation = () => {
+  return [
+    check("name")
+      .not()
+      .isEmpty()
+      .withMessage("Name cannot be empty, Please Enter name"),
+    check("name")
+      .isLength({ min: 3 })
+      .withMessage("Name must be at least 3 characters long"),
+  ];
 };
 
-module.exports = checkNameValidation;
+const validationMiddleWare = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
+
+module.exports = { checkRoleValidation, validationMiddleWare };

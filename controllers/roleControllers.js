@@ -3,7 +3,7 @@ const Role = require("../models/role");
 const addRole = async (req, res) => {
   try {
     const { name, description } = req.body;
-    const data = await Role({
+    await Role({
       name,
       description,
     }).save();
