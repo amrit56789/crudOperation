@@ -57,6 +57,10 @@ const getUserValidate = () => {
   return [check("_id").not().isEmpty().withMessage("Please define id")];
 };
 
+const deleteLoginData = () => {
+  return [check("id").not().isEmpty().withMessage("Please Enter valid id")];
+};
+
 const validationMiddleWare = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -72,5 +76,6 @@ module.exports = {
   checkUserValidation,
   emailValidation,
   getUserValidate,
+  deleteLoginData,
   validationMiddleWare,
 };

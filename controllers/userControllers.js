@@ -70,4 +70,15 @@ const getUser = async (req, res) => {
   }
 };
 
-module.exports = { userCreate, loginUser, getUser };
+const deleteUserLoginData = async (req, res) => {
+  try {
+    const { id } = req.headers;
+    await user.findByIdAndDelete(id);
+    res.status(200).send({ message: "Data success fully delete" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+};
+
+module.exports = { userCreate, loginUser, getUser, deleteUserLoginData };
