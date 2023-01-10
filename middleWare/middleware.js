@@ -53,6 +53,10 @@ const emailValidation = () => {
   return [check("email").isEmail().withMessage("Please Enter a correct email")];
 };
 
+const getUserValidate = () => {
+  return [check("_id").not().isEmpty().withMessage("Please define id")];
+};
+
 const validationMiddleWare = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -67,5 +71,6 @@ module.exports = {
   RoleEditValidation,
   checkUserValidation,
   emailValidation,
+  getUserValidate,
   validationMiddleWare,
 };
