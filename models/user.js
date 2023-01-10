@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { connection } = require("../util/database");
 const role = require("../models/role");
+
 const user = new mongoose.Schema({
   username: {
     type: String,
@@ -27,6 +28,9 @@ const user = new mongoose.Schema({
     ref: role,
     require: true,
     index: true,
+  },
+  passwordResetToken: {
+    type: String,
   },
 });
 

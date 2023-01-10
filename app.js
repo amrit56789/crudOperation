@@ -21,6 +21,7 @@ const {
   deleteUserLoginData,
   findLimitUserData,
   addAddress,
+  userForgetPassword,
 } = require("./controllers/userControllers");
 
 const {
@@ -72,6 +73,9 @@ app.get("/user/list/:limit/:page", findLimitUserData);
 
 // Address
 app.post("/user/address", tokenValidator, addAddress);
+
+// forget password route
+app.get("/user/forget-password", userForgetPassword);
 
 // Port connection
 const port = process.env.port || 8000;
