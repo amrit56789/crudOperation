@@ -7,6 +7,7 @@ const addRole = async (req, res) => {
       name,
       description,
     }).save();
+    console.log(Role._id);
     res.status(200).send({ message: "Data success fully add" });
   } catch (error) {
     console.log(error);

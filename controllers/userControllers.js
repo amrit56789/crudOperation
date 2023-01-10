@@ -1,6 +1,7 @@
 const user = require("../models/user");
 const bcrypt = require("bcrypt");
 
+const Role = require("../models/role");
 const userCreate = async (req, res) => {
   try {
     const {
@@ -18,12 +19,13 @@ const userCreate = async (req, res) => {
 
     const addUser = await user({
       username,
-      password,
+      password: hashCode,
       email,
       firstName,
       lastName,
       roleId,
     }).save();
+
     res.status(200).send({ message: "Success fully add" });
   } catch (error) {
     console.log(error);
