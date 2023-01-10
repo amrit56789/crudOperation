@@ -1,7 +1,10 @@
-const user = require("../models/user");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
+const user = require("../models/user");
 const Role = require("../models/role");
+const Token = require("../models/accessToken");
+
 const userCreate = async (req, res) => {
   try {
     const {
@@ -46,7 +49,8 @@ const loginUser = async (req, res) => {
     } else {
       const passwordMatch = await bcrypt.compare(password, data.password);
       if (passwordMatch) {
-        res.status(200).send({ message: `Token is ${data._id}` });
+        const tokenVal = await createTokenSave(data._id, email, password);
+        res.status(200).send(tokenVal);
       } else {
         res.status(500).send({
           message: "500 Error to user, Email or password is incorrect",
@@ -91,6 +95,22 @@ const findLimitUserData = async (req, res) => {
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" });
   }
+};
+
+const createTokenSave = async (id, email, password) => {
+  const tokenValue = crypto
+    .createHash("md5")
+    .update(`${email}${password}${process.env.SECRET_KEY}`)
+    .digest("hex");
+
+  const expiryDate = new Date();
+
+  const tokenData = await Token({
+    userId: id,
+    token: tokenValue,
+    expiryDate: expiryDate,
+  }).save();
+  return tokenData;
 };
 
 module.exports = {
