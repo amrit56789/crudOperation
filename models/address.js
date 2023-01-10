@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const { connection } = require("../util/database");
-const user = require("../models/user");
+
 const address = new mongoose.Schema(
   {
     address: {
@@ -24,15 +24,8 @@ const address = new mongoose.Schema(
       type: Number,
       allowNull: false,
     },
-    userId: {
-      type: String,
-      ref: user,
-      required: true,
-      index: true,
-    },
   },
   {
-    freezeTableName: true,
     timestamps: false,
   }
 );

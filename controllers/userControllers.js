@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 const user = require("../models/user");
 const Role = require("../models/role");
@@ -48,7 +49,7 @@ const loginUser = async (req, res) => {
         .status(401)
         .send({ message: "500 Error to user, Email or password is incorrect" });
     } else {
-      const passwordMatch = await bcrypt.compare(password, data.password);
+      const passwordMatch = bcrypt.compare(password, data.password);
       if (passwordMatch) {
         const tokenVal = await createTokenSave(data._id, email, password);
         res.status(200).send(tokenVal);
@@ -67,11 +68,17 @@ const loginUser = async (req, res) => {
 const getUser = async (req, res) => {
   try {
     const { _id } = req.headers;
-    const data = await user.find({ _id });
-    res.status(200).send(data);
+    const userData = await user.findById({ _id });
+
+    if (!userData) {
+      res.status(500).send({ message: "500 error, Id is invalid" });
+    }
+    res.status(200).send(userData);
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: "Internal server error" });
+    res
+      .status(500)
+      .send({ message: "500 error to user, Internal server error" });
   }
 };
 
@@ -133,6 +140,32 @@ const addAddress = async (req, res) => {
   }
 };
 
+const userForgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const data = await user.findOne({ email });
+
+    if (!data) {
+      return res.status(400).send({ message: "Enter a valid data" });
+    } else {
+      let jwtToken = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+
+      const updateData = await user.updateOne(
+        { email: req.body.email },
+        { passwordResetToken: jwtToken }
+      );
+      console.log(updateData);
+
+      res
+        .status(200)
+        .send({ message: "User password reset token updated successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "500 error, Internal error" });
+  }
+};
+
 module.exports = {
   userCreate,
   loginUser,
@@ -140,4 +173,5 @@ module.exports = {
   deleteUserLoginData,
   findLimitUserData,
   addAddress,
+  userForgetPassword,
 };
