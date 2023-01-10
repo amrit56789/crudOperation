@@ -103,7 +103,8 @@ const createTokenSave = async (id, email, password) => {
     .update(`${email}${password}${process.env.SECRET_KEY}`)
     .digest("hex");
 
-  const expiryDate = new Date().setHours(1);
+  const expiryDate = new Date();
+  expiryDate.setHours(1);
 
   const tokenData = await Token({
     userId: id,
