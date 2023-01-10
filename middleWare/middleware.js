@@ -1,5 +1,5 @@
 const { check, validationResult } = require("express-validator");
-
+const role = require("../models/role");
 const checkRoleValidation = () => {
   return [
     check("name")

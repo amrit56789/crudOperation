@@ -14,6 +14,7 @@ const user = new mongoose.Schema({
   email: {
     type: String,
     allowNull: false,
+    unique: true,
   },
   firstName: {
     type: String,
@@ -22,7 +23,7 @@ const user = new mongoose.Schema({
     type: String,
   },
   roleId: {
-    type: mongoose.Schema.ObjectId,
+    type: Number,
     ref: role,
     require: true,
     index: true,
