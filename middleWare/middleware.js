@@ -49,6 +49,10 @@ const checkUserValidation = (req, res) => {
   ];
 };
 
+const emailValidation = () => {
+  return [check("email").isEmail().withMessage("Please Enter a correct email")];
+};
+
 const validationMiddleWare = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -62,5 +66,6 @@ module.exports = {
   RoleDeleteValidation,
   RoleEditValidation,
   checkUserValidation,
+  emailValidation,
   validationMiddleWare,
 };
