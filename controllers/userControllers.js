@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const user = require("../models/user");
 const Role = require("../models/role");
 const Token = require("../models/accessToken");
+const Address = require("../models/address");
 
 const userCreate = async (req, res) => {
   try {
@@ -105,13 +106,31 @@ const createTokenSave = async (id, email, password) => {
 
   const expiryDate = new Date();
   expiryDate.setHours(1);
-
   const tokenData = await Token({
     userId: id,
     token: tokenValue,
     expiryDate: expiryDate,
   }).save();
+  console.log(tokenData.expiryDate);
   return tokenData;
+};
+
+const addAddress = async (req, res) => {
+  try {
+    const { address, city, state, pin_code, phone_number, userId } = req.body;
+    const createAddress = await Address.create({
+      address,
+      city,
+      state,
+      pin_code,
+      phone_number,
+      userId,
+    });
+    res.status(200).send(createAddress);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
 };
 
 module.exports = {
@@ -120,4 +139,5 @@ module.exports = {
   getUser,
   deleteUserLoginData,
   findLimitUserData,
+  addAddress,
 };

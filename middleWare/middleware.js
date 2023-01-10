@@ -1,5 +1,6 @@
 const { check, validationResult } = require("express-validator");
 const role = require("../models/role");
+const Token = require("../models/accessToken");
 const checkRoleValidation = () => {
   return [
     check("name")
@@ -61,6 +62,34 @@ const deleteLoginData = () => {
   return [check("id").not().isEmpty().withMessage("Please Enter valid id")];
 };
 
+const tokenValidator = async (req, res, next) => {
+  try {
+    const token = req.headers.token;
+    // check if the token exists or not
+    if (!token) {
+      return res.status(400).json({ message: "Please Enter Token" });
+    }
+
+    const findToken = await Token.findOne({ token });
+    if (!findToken) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    // check token is expired or not
+    const expiryDate = findToken.expiryDate;
+    const currentTime = new Date();
+    if (expiryDate < currentTime) {
+      return res.status(401).json({ message: "Token has expired" });
+    }
+
+    req.body.userId = findToken.userId;
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "An error occurred" });
+  }
+};
+
 const validationMiddleWare = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -77,5 +106,6 @@ module.exports = {
   emailValidation,
   getUserValidate,
   deleteLoginData,
+  tokenValidator,
   validationMiddleWare,
 };
