@@ -14,7 +14,7 @@ const accessToken = new mongoose.Schema(
       unique: true,
     },
     expiryDate: {
-      type: Date,
+      type: String,
       allowNull: false,
     },
   },
