@@ -33,4 +33,30 @@ const userCreate = async (req, res) => {
   }
 };
 
-module.exports = { userCreate };
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const data = await user.findOne({
+      email,
+    });
+    if (!data) {
+      res
+        .status(401)
+        .send({ message: "500 Error to user, Email or password is incorrect" });
+    } else {
+      const passwordMatch = await bcrypt.compare(password, data.password);
+      if (passwordMatch) {
+        res.status(200).send({ message: `Token is ${data._id}` });
+      } else {
+        res.status(500).send({
+          message: "500 Error to user, Email or password is incorrect",
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+};
+
+module.exports = { userCreate, loginUser };
