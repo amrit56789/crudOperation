@@ -14,7 +14,12 @@ const {
   findSingleRoleData,
 } = require("./controllers/roleControllers");
 
-const { userCreate, loginUser } = require("./controllers/userControllers");
+const {
+  userCreate,
+  loginUser,
+  getUser,
+  deleteUserLoginData,
+} = require("./controllers/userControllers");
 
 const {
   checkRoleValidation,
@@ -22,6 +27,8 @@ const {
   RoleEditValidation,
   checkUserValidation,
   emailValidation,
+  getUserValidate,
+  deleteLoginData,
   validationMiddleWare,
 } = require("./middleWare/middleware");
 
@@ -52,7 +59,12 @@ app.post(
 
 // Login
 app.post("/user/login", [emailValidation(), validationMiddleWare], loginUser);
-
+app.get("/user/app/:id", [getUserValidate(), validationMiddleWare], getUser);
+app.put(
+  "/user/delete",
+  [deleteLoginData(), validationMiddleWare],
+  deleteUserLoginData
+);
 // Port connection
 const port = process.env.port || 8000;
 
