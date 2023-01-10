@@ -81,4 +81,22 @@ const deleteUserLoginData = async (req, res) => {
   }
 };
 
-module.exports = { userCreate, loginUser, getUser, deleteUserLoginData };
+const findLimitUserData = async (req, res) => {
+  try {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const skip = limit * (page - 1);
+    const data = await user.find({}).limit(limit).skip(skip).exec();
+    res.status(200).send(data);
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = {
+  userCreate,
+  loginUser,
+  getUser,
+  deleteUserLoginData,
+  findLimitUserData,
+};

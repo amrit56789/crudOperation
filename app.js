@@ -19,6 +19,7 @@ const {
   loginUser,
   getUser,
   deleteUserLoginData,
+  findLimitUserData,
 } = require("./controllers/userControllers");
 
 const {
@@ -65,6 +66,7 @@ app.put(
   [deleteLoginData(), validationMiddleWare],
   deleteUserLoginData
 );
+app.get("/user/list/:limit/:page", findLimitUserData);
 // Port connection
 const port = process.env.port || 8000;
 
