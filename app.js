@@ -22,6 +22,7 @@ const {
   findLimitUserData,
   addAddress,
   userForgetPassword,
+  checkResetPasswordToken,
 } = require("./controllers/userControllers");
 
 const {
@@ -76,7 +77,10 @@ app.post("/user/address", tokenValidator, addAddress);
 
 // forget password route
 app.get("/user/forget-password", userForgetPassword);
-
+app.get(
+  "/user/verify-reset-password/:passwordResetToken",
+  checkResetPasswordToken
+);
 // Port connection
 const port = process.env.port || 8000;
 
