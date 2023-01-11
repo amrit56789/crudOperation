@@ -6,6 +6,7 @@ dotenv.config();
 const bodyParser = require("body-parser");
 
 const mongoConnect = require("./util/database");
+const { uploads } = require("./controllers/fileUploads");
 const {
   addRole,
   deleteRole,
@@ -81,6 +82,12 @@ app.get(
   "/user/verify-reset-password/:passwordResetToken",
   checkResetPasswordToken
 );
+
+// Profile Image
+app.post("/user/profile-image/", uploads.single("images"), (req, res) => {
+  res.status(200).send({ message: "Success full add" });
+});
+
 // Port connection
 const port = process.env.port || 8000;
 
