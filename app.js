@@ -85,7 +85,13 @@ app.get(
 
 // Profile Image
 app.post("/user/profile-image/", uploads.single("images"), (req, res) => {
-  res.status(200).send({ message: "Success full add" });
+  if (!req.file) {
+    res
+      .status(401)
+      .send({ message: "Please upload an image with less then 2mb" });
+  } else {
+    res.status(200).send({ message: "Success full add" });
+  }
 });
 
 // Port connection
