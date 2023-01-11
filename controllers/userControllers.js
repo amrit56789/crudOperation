@@ -166,6 +166,48 @@ const userForgetPassword = async (req, res) => {
   }
 };
 
+const checkResetPasswordToken = async (req, res) => {
+  try {
+    const { passwordResetToken } = req.params;
+    if (!passwordResetToken) {
+      return res.status(401).send({ message: "Please enter reset token" });
+    }
+
+    const jwtCheck = jwt.verify(
+      passwordResetToken,
+      process.env.SECRET_KEY,
+      { expiryIn: "10m" },
+      async (error, data) => {
+        if (error) {
+          res.status(400).send({ message: "Unauthorized token" });
+        } else {
+          try {
+            const { password } = req.body;
+            if (!password) {
+              res.status(400).send({ message: "Please Enter a password" });
+            } else {
+              const salt = await bcrypt.genSalt(10);
+              const hashCode = await bcrypt.hash(password, salt);
+
+              const updateData = await user.updateOne(
+                { passwordResetToken: passwordResetToken },
+                { password: hashCode }
+              );
+              res.status(200).send(updateData);
+            }
+          } catch (error) {
+            console.log(error);
+            res.status(500).send({ message: "Internal server error" });
+          }
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "500, Internal server error" });
+  }
+};
+
 module.exports = {
   userCreate,
   loginUser,
@@ -174,4 +216,5 @@ module.exports = {
   findLimitUserData,
   addAddress,
   userForgetPassword,
+  checkResetPasswordToken,
 };
